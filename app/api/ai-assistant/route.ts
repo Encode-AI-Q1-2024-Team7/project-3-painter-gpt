@@ -4,14 +4,11 @@ import { openai } from '@/app/utils/openai';
 // IMPORTANT! Set the runtime to edge
 export const runtime = 'edge';
 
+// Set assistant name here if you have setup in OpenAI
 const ASSISTANT_NAME = 'DaVinci';
 
 export async function POST(req: Request) {
-  console.log('route.ts: POST');
   const data = await req.json();
-  console.log('route.ts: data: ', data);
-
-  console.log('route.ts: input.message: ', data.message);
 
   // Setup the assistant
   let assistant = null;
@@ -32,7 +29,7 @@ export async function POST(req: Request) {
     assistant = await openai.beta.assistants.create({
       name: ASSISTANT_NAME,
       instructions:
-        'You are a professional painting researcher and a helpful assistant that receives a short description of an object and will use to randomly suggest vivid details of an art painting to represent this object.  You will suggest the specific  elements, style, details, color, space, and composition that should make up this incredible art painting. If you receive a short description that does not represent an object, you will politely ask to try again.',
+        'You are a professional painting researcher and a helpful assistant that receives a short description of an object and will use to randomly suggest vivid details of an art painting to represent this object.  You will suggest the specific elements, style, color, space, and composition that should make up this incredible art painting. Your response should be less than 200 words. If you receive a short description that does not represent an object, you will politely ask to try again.',
       model: 'gpt-4-turbo-preview',
     });
   }
@@ -48,9 +45,11 @@ export async function POST(req: Request) {
   });
 
   // run the thread using the assistant
+  // - Uncomment the event listeners to see the different events
   const run = openai.beta.threads.runs
     .stream(threadId, {
       assistant_id: assistant.id,
+      temperature: 1,
     })
     // .on('textCreated', (text) => console.log('textCreated: ', text))
     // .on('textDelta', (textDelta) =>
@@ -70,13 +69,14 @@ export async function POST(req: Request) {
     // .on('messageDelta', (messageDelta) =>
     //   console.log('messageDelta: ', messageDelta)
     // )
-    .on('messageDone', (messageDone) =>
-      console.log('messageDone: ', messageDone)
-    );
+    // .on('messageDone', (messageDone) =>
+    //   console.log('messageDone: ', messageDone)
+    // )
+    ;
 
   const result = await run.finalRun();
-  console.log('completed run');
-  console.log(result);
+  console.log('********** Assistant Run Completed **********');
+  // console.log(result);
 
   // Get new thread messages (after our message)
   const responseMessages = (
@@ -85,7 +85,7 @@ export async function POST(req: Request) {
     })
   ).data;
 
-  console.log('responseMessages: ', responseMessages);
+  // console.log('responseMessages: ', responseMessages);
 
   const messages = responseMessages.map((message) => {
     const textContent = message.content.find(

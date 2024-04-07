@@ -15,6 +15,22 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
+    // that is animation class
+    animation: {
+      fade: 'fadeIn 2s ease-in-out',
+    },
+
+    // that is actual animation
+    keyframes: {
+      fadeIn: {
+        '0%': { opacity: '0' },
+        '100%': { opacity: '1' },
+      },
+      fadeOut: {
+        '0%': { opacity: '1' },
+        '100%': { opacity: '0' },
+      },
+    },
   },
   plugins: [daisyui],
   daisyui: {

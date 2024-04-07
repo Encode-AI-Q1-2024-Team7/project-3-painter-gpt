@@ -41,7 +41,7 @@ export default function DropDownBox({
 
   return (
     <Combobox as='div' value={state} onChange={setState}>
-      <Combobox.Label className='block text-sm font-medium leading-6 text-white-900'>
+      <Combobox.Label className='block text-lg font-medium leading-6 text-white-900 text-center'>
         {sectionTitle}
       </Combobox.Label>
       <div className='relative mt-2'>
