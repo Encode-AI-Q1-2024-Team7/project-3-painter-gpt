@@ -6,7 +6,7 @@ A Painter GPT program that suggests vivid ideas for a painting based on an art t
 
 ### Sample Demo
 
-TODO
+https://github.com/Encode-AI-Q1-2024-Team7/project-3-painter-gpt/assets/105133922/7b78f9c1-c756-4052-9711-5eee30456e33
 
 ## Instructions
 
